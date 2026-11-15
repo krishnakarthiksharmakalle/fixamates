@@ -1,26 +1,38 @@
-@import "tailwindcss";
+@import "tailwindcss"; /* Tailwind v3? replace this line with @tailwind base; @tailwind components; @tailwind utilities; */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f2f4f0; --surface: #ffffff; --surface-2: #e8ece6;
+  --ink: #16201b; --muted: #5e6b63; --line: #d5dbd2;
+  --accent: #f2b705; --accent-ink: #1a1500; --danger: #b42318;
+  color-scheme: light;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root[data-theme="dark"] {
+  --bg: #0f1311; --surface: #171c19; --surface-2: #212823;
+  --ink: #e9eee9; --muted: #93a097; --line: #2b332d;
+  --accent: #f5c518; --accent-ink: #1a1500; --danger: #ff8a7a;
+  color-scheme: dark;
 }
-
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --bg: #0f1311; --surface: #171c19; --surface-2: #212823;
+    --ink: #e9eee9; --muted: #93a097; --line: #2b332d;
+    --accent: #f5c518; --accent-ink: #1a1500; --danger: #ff8a7a;
+    color-scheme: dark;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body), system-ui, sans-serif; }
+
+.fm-card { background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; }
+.fm-btn { background: var(--accent); color: var(--accent-ink); font-weight: 600; border-radius: .75rem; }
+.fm-btn:disabled { opacity: .4; cursor: not-allowed; }
+.fm-ghost { background: var(--surface-2); color: var(--ink); border-radius: .75rem; }
+.fm-btn:focus-visible, .fm-ghost:focus-visible, a:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
 }
+.safe-b { padding-bottom: max(.75rem, env(safe-area-inset-bottom)); }
+
+@keyframes fm-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--danger) 55%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
+.fm-rec { animation: fm-pulse 1.2s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) { .fm-rec { animation: none; } }
